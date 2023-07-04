@@ -92,10 +92,31 @@ module OmniAuth
 
             def build_access_token
                 verifier = request.params["code"]
-                client.auth_code.get_token(verifier,
-                    {:redirect_uri => callback_url}
+                cu2 = callback_url.gsub(/\?.+\Z/, "")
+                Rails.logger.info "BAT1: #{callback_url}"
+                Rails.logger.info "BAT2: #{cu2}"
+                Rails.logger.info " TP : #{token_params}"
+                Rails.logger.info "OATP: #{options.auth_token_params}"
+                result = client.auth_code.get_token(verifier,
+                    {:redirect_uri => callback_url.gsub(/\?.+\Z/, "")+"?resource_class=User"}
                     .merge(token_params.to_hash(:symbolize_keys => true)),
                     deep_symbolize(options.auth_token_params))
+                Rails.logger.info "  RS: #{result.to_hash}"
+                Rails.logger.info "   S: #{session.to_hash}"
+                #Rails.logger.info "  RE: #{request.env}"
+                result
+            end
+
+            def authorize_params
+                result = super
+                Rails.logger.info "  AP: #{result.to_hash}"
+                result
+            end
+
+            def callback_phase
+                result = super
+                Rails.logger.info " CPR: #{result}"
+                result
             end
 
             def request_phase
