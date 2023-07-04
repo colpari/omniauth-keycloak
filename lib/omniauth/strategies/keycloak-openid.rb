@@ -98,7 +98,7 @@ module OmniAuth
                 Rails.logger.info " TP : #{token_params}"
                 Rails.logger.info "OATP: #{options.auth_token_params}"
                 result = client.auth_code.get_token(verifier,
-                    {:redirect_uri => callback_url.gsub(/\?.+\Z/, "")+"?resource_class=User"}
+                    {:redirect_uri => callback_url.gsub(/\?.+\Z/, "")}
                     .merge(token_params.to_hash(:symbolize_keys => true)),
                     deep_symbolize(options.auth_token_params))
                 Rails.logger.info "  RS: #{result.to_hash}"
