@@ -107,6 +107,12 @@ module OmniAuth
                 result
             end
 
+            def callback_url
+                result = full_host + script_name + callback_path
+                Rails.logger.info " CBU: #{result}"
+                result
+            end
+
             def authorize_params
                 result = super
                 Rails.logger.info "  AP: #{result.to_hash}"
